@@ -1,10 +1,10 @@
 <template>
 
-  <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+  <div class="register-container">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">查重系统</h3>
+        <h3 class="title">欢迎来到查重系统，请先注册</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
@@ -12,8 +12,8 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
+          v-model="registerForm.username"
+          placeholder="Username@email.com"
           name="username"
           type="text"
           tabindex="1"
@@ -28,49 +28,37 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           :type="passwordType"
           placeholder="Password"
           name="password"
           tabindex="2"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          @keyup.enter.native="handleregister"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:48%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-      <el-button :loading="loading" type="primary" style="width:48%;margin-bottom:30px;" @click.native.prevent="goRegister">Register</el-button>
+      <!-- <Vcode :show="isShow" @success="success" @close="close" /> -->
 
-      <div class="tips">
-        <span style="margin-right:20px;font-size: medium;">这是一个查重系统，可以帮助您检查代码或论文是否抄袭!</span>
-        <!-- <span> password: any</span> -->
-      </div>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleregister">register</el-button>
 
     </el-form>
-    <div class="right">
-      <span style="font-size: 28px;color: antiquewhite;">为什么选择我们!</span>
-      <ul style="font-size: 28px; color: burlywood;">
-          <li>高效</li>
-          <li>低误差</li>
-          <li>全备份</li>
-          <li>多类型文本适用</li>
-        </ul>
-    </div>
 </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
+import { validEmail } from '@/utils/validate'
+import { Message } from 'element-ui'
+// import Vcode from 'vue-puzzle-vcode'
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!validEmail(value)) {
+        callback(new Error('Please enter the correct email'))
       } else {
         callback()
       }
@@ -83,19 +71,23 @@ export default {
       }
     }
     return {
-      loginForm: {
-        username: '',
-        password: ''
+      registerForm: {
+        username: 'admin@email.com',
+        password: '111111'
       },
-      loginRules: {
+      registerRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
+      // isShow: true,
       loading: false,
       passwordType: 'password',
       redirect: undefined
     }
   },
+  // components: {
+  //   Vcode
+  // },
   watch: {
     $route: {
       handler: function(route) {
@@ -115,16 +107,18 @@ export default {
         this.$refs.password.focus()
       })
     },
-    goRegister() {
-      console.log('register')
-      this.$router.push({ path: '/register' })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleregister() {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
+          // this.isShow = true
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('user/register', this.registerForm).then((data) => {
+            Message({
+              message: '注册成功',
+              type: 'success',
+              duration: 5 * 1000
+            })
+            this.$router.push({ path: this.redirect || '/login' })
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -135,6 +129,18 @@ export default {
         }
       })
     }
+    // submit() {
+    //   console.log('submit')
+    //   this.isShow = true
+    // },
+    // // 用户通过了验证
+    // success(msg) {
+    //   this.isShow = false // 通过验证后，需要手动隐藏模态框
+    // },
+    // // 用户点击遮罩层，应该关闭模态框
+    // close() {
+    //   this.isShow = false
+    // }
   }
 }
 </script>
@@ -148,13 +154,13 @@ $light_gray:#fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
+  .register-container .el-input input {
     color: $cursor;
   }
 }
 
 /* reset element-ui css */
-.login-container {
+.register-container {
   .el-input {
     display: inline-block;
     height: 47px;
@@ -191,7 +197,7 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
-.login-container {
+.register-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
@@ -199,7 +205,7 @@ $light_gray:#eee;
   display: flex;
   justify-content: center;
 
-  .login-form {
+  .register-form {
     position: relative;
     width: 520px;
     max-width: 100%;
