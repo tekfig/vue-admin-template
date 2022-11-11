@@ -6,15 +6,15 @@
       <div class="title-container">
         <h3 class="title">欢迎来到查重系统，请先注册</h3>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="registerForm.username"
-          placeholder="Username@email.com"
-          name="username"
+          ref="email"
+          v-model="registerForm.email"
+          placeholder="email"
+          name="email"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -46,7 +46,7 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleregister">register</el-button>
 
     </el-form>
-</div>
+  </div>
 </template>
 
 <script>
@@ -56,7 +56,7 @@ import { Message } from 'element-ui'
 export default {
   name: 'Register',
   data() {
-    const validateUsername = (rule, value, callback) => {
+    const validateEmail = (rule, value, callback) => {
       if (!validEmail(value)) {
         callback(new Error('Please enter the correct email'))
       } else {
@@ -72,14 +72,13 @@ export default {
     }
     return {
       registerForm: {
-        username: 'admin@email.com',
-        password: '111111'
+        email: '',
+        password: ''
       },
       registerRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
-      // isShow: true,
       loading: false,
       passwordType: 'password',
       redirect: undefined
@@ -110,7 +109,6 @@ export default {
     handleregister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
-          // this.isShow = true
           this.loading = true
           this.$store.dispatch('user/register', this.registerForm).then((data) => {
             Message({
@@ -129,18 +127,6 @@ export default {
         }
       })
     }
-    // submit() {
-    //   console.log('submit')
-    //   this.isShow = true
-    // },
-    // // 用户通过了验证
-    // success(msg) {
-    //   this.isShow = false // 通过验证后，需要手动隐藏模态框
-    // },
-    // // 用户点击遮罩层，应该关闭模态框
-    // close() {
-    //   this.isShow = false
-    // }
   }
 }
 </script>

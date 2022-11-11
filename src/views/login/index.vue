@@ -6,15 +6,15 @@
       <div class="title-container">
         <h3 class="title">查重系统</h3>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="email"
+          v-model="loginForm.email"
+          placeholder="email"
+          name="email"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -63,14 +63,14 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validEmail } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+    const validateEmail = (rule, value, callback) => {
+      if (!validEmail(value)) {
+        callback(new Error('Please enter the correct email'))
       } else {
         callback()
       }
@@ -84,11 +84,11 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
@@ -122,6 +122,7 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          console.log('valid' + valid)
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })

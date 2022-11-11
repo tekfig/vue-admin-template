@@ -25,3 +25,17 @@ export function validUsername(str) {
 export function validEmail(email) {
   return /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(email)
 }
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validTaskName(name) {
+  console.log('validTaskName', name)
+  return name.trim.length > 5
+}
+export function validTaskLanguage(language) {
+  return language != null
+}
+export function validTaskFile(file) {
+  return file != null
+}
