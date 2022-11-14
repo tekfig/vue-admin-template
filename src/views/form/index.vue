@@ -1,23 +1,27 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="addRules" label-width="120px">
-      <el-form-item label="Task name">
+      <el-form-item label="Task name" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="Language">
-        <el-select v-model="form.language" placeholder="select your language">
-          <el-option label="Java" value="java" />
-          <el-option label="CPP" value="cpp" />
-          <el-option label="CSharp" value="csharp" />
-          <el-option label="Golang" value="golang" />
-          <el-option label="Kotlin" value="kotlin" />
-          <el-option label="Python3" value="python" />
-          <el-option label="Rust" value="rust" />
-          <el-option label="Scala" value="scala" />
-          <el-option label="Swift" value="swift" />
+      <el-form-item label="Language" prop="language">
+        <el-select v-model="form.language" clearable placeholder="select your language">
+          <el-option label="Java" value="Java" />
+          <el-option label="CPP" value="CPP" />
+          <el-option label="CSharp" value="CSharp" />
+          <el-option label="Golang" value="Golang" />
+          <el-option label="Kotlin" value="Kotlin" />
+          <el-option label="Python3" value="Python3" />
+          <el-option label="Rust" value="Rust" />
+          <el-option label="Scala" value="Scala" />
+          <el-option label="Swift" value="Swift" />
+          <el-option label="Scheme" value="Scheme" />
+          <el-option label="Rlang" value="Rlang" />
+          <el-option label="Emf" value="Emf" />
+          <el-option label="Text" value="Text" />
         </el-select>
       </el-form-item>
-      <el-form-item label="File">
+      <el-form-item label="File" prop="file">
       <el-upload
         ref="upload"
         :file-list="fileList"
@@ -25,6 +29,7 @@
         drag
         :limit="1"
         action=""
+        accept=".zip"
         :before-remove="beforeRemove"
         :on-exceed="limitSize"
         :on-change="handleChange"
@@ -67,7 +72,7 @@ export default {
     }
     const validFile = (rule, value, callback) => {
       if (!validTaskFile(value)) {
-        callback(new Error('Please check task name'))
+        callback(new Error('Please check task file'))
       } else {
         callback()
       }
@@ -81,7 +86,7 @@ export default {
       fileList: [],
       addRules: {
         name: [{ required: true, trigger: 'blur', validator: validName }],
-        language: [{ required: true, trigger: 'blur', validator: validLanguage }],
+        language: [{ required: true, trigger: 'change', validator: validLanguage }],
         file: [{ required: true, trigger: 'blur', validator: validFile }]
       }
     }
@@ -94,7 +99,10 @@ export default {
       })
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+      return this.$confirm(`确定移除 ${file.name}?`).then(() => {
+        this.form.file = null
+        // this.$refs.upload.clearFiles()
+      })
     },
     handleChange(file, fileList) {
       this.form.file = file.raw
@@ -106,7 +114,7 @@ export default {
           this.$store.dispatch('task/add', this.form).then(() => {
             // this.$router.push({ path: this.redirect || '/task/list' })
             this.$message({
-              message: 'upload success!,please find result on file list menu',
+              message: 'upload success!',
               type: 'success',
               duration: 5 * 1000
             })

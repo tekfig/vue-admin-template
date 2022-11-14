@@ -80,7 +80,6 @@ const actions = {
 
   // user register
   register({ commit }, userInfo) {
-    console.log(userInfo)
     const { email, password } = userInfo
     return new Promise((resolve, reject) => {
       register({ email: email.trim(), password: password }).then(response => {

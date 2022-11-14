@@ -6,15 +6,19 @@
       </el-form-item>
       <el-form-item label="Language">
         <el-select v-model="paramsInfo.language" clearable placeholder="select your language">
-          <el-option label="Java" value="java" />
-          <el-option label="CPP" value="cpp" />
-          <el-option label="CSharp" value="csharp" />
-          <el-option label="Golang" value="golang" />
-          <el-option label="Kotlin" value="kotlin" />
-          <el-option label="Python3" value="python" />
-          <el-option label="Rust" value="rust" />
-          <el-option label="Scala" value="scala" />
-          <el-option label="Swift" value="swift" />
+          <el-option label="Java" value="Java" />
+          <el-option label="CPP" value="CPP" />
+          <el-option label="CSharp" value="CSharp" />
+          <el-option label="Golang" value="Golang" />
+          <el-option label="Kotlin" value="Kotlin" />
+          <el-option label="Python3" value="Python3" />
+          <el-option label="Rust" value="Rust" />
+          <el-option label="Scala" value="Scala" />
+          <el-option label="Swift" value="Swift" />
+          <el-option label="Scheme" value="Scheme" />
+          <el-option label="Rlang" value="Rlang" />
+          <el-option label="Emf" value="Emf" />
+          <el-option label="Text" value="Text" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -45,20 +49,25 @@
           <span>{{ scope.row.taskName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Result" width="110" align="center">
+      <el-table-column label="Language" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.language }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Similarity" width="110" align="center">
         <template slot-scope="scope">
           {{ scope.row.avgValue }}
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col" label="Status" width="130" align="center">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="task_time" width="200">
         <template slot-scope="scope">
           <!-- <i class="el-icon-time" /> -->
           <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="130" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -68,10 +77,10 @@
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.status==='SUCCESS'"
-            @click.native.prevent="viewResult(scope.row.taskId, scope.$index)"
             type="text"
-            size="small">
-            View Result
+            size="small"
+            @click.native.prevent="viewResult(scope.row.taskId, scope.$index)">
+            Download Detail
           </el-button>
         </template>
       </el-table-column>
@@ -122,7 +131,6 @@ export default {
   },
   methods: {
     fetchData(paramsInfo) {
-      console.log(this.paramsInfo)
       this.listLoading = true
       getList(paramsInfo).then(response => {
         this.list = response.data.records
@@ -140,7 +148,7 @@ export default {
       })
     },
     tableRowClassName({ row, rowIndex }) {
-      if (row.status === 'INIT') {
+      if (row.status === 'PROCESSING') {
         return 'warning-row'
       } else if (row.status === 'SUCCESS') {
         return 'success-row'
@@ -149,12 +157,14 @@ export default {
     },
     viewResult(taskId, rowIndex) {
       result(taskId).then(response => {
-        const url = window.URL.createObjectURL(new Blob([response], {}))
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/zip' }))
         const link = document.createElement('a')
         link.href = url
-        link.setAttribute('download', `result.zip`)
+        link.setAttribute('download', `result`)
+        // link.download = response.headers['filename']
         document.body.appendChild(link)
         link.click()
+        document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
       })
     }

@@ -45,9 +45,10 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (response.config.config) {
-      if (response.config.config.responseType === 'blob') {
-        return res
+    if (response.config) {
+      if (response.config.responseType === 'blob') {
+        console.log('response is blob')
+        return response
       }
     }
     // console.log(response)

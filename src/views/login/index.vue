@@ -116,13 +116,11 @@ export default {
       })
     },
     goRegister() {
-      console.log('register')
       this.$router.push({ path: '/register' })
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          console.log('valid' + valid)
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })

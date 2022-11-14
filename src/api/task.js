@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export function add(data) {
-  console.log('insert api')
   return request({
     url: '/task/add',
     method: 'post',
@@ -9,14 +8,14 @@ export function add(data) {
   })
 }
 export function result(data) {
-  console.log(data)
   return request({
     url: '/task/result',
     method: 'post',
     params: { taskId: data },
-    config: {
-      responseType: 'blob'
-    }
+    responseType: 'blob'
+    // config: {
+    //   responseType: 'blob'
+    // }
   })
 }
 export function trigger(data) {

@@ -8,7 +8,6 @@ export function login(data) {
   })
 }
 export function insert(data) {
-  console.log('insert api')
   return request({
     url: '/task/add',
     method: 'post',

@@ -30,12 +30,11 @@ export function validEmail(email) {
  * @returns {Boolean}
  */
 export function validTaskName(name) {
-  console.log('validTaskName', name)
-  return name.trim.length > 5
+  return name !== null && name !== ''
 }
 export function validTaskLanguage(language) {
-  return language != null
+  return language !== null && language !== ''
 }
 export function validTaskFile(file) {
-  return file != null
+  return file !== null
 }
