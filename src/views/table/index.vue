@@ -166,6 +166,11 @@ export default {
         link.click()
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
+      }).then(res => {
+        const link = document.createElement('a')
+        link.href = 'http://161.35.227.64/JPlag/'
+        link.target = '_blank'
+        link.click()
       })
     }
   }

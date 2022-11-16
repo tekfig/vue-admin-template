@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-    <div class="dashboard-text">date: {{ date }}</div>
+    <div class="dashboard-text">Welcome: {{ name }}</div>
+    <div class="dashboard-text"> After you download result, Please view Detail  <a target="_blank" style="color:red; font-size: 50px" href="http://161.35.227.64/JPlag/">here</a> </div>
   </div>
 </template>
 

@@ -36,7 +36,7 @@
         :auto-upload="false">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">Please drag file here, or <em>Click to Upload</em></div>
-        <div class="el-upload__tip" slot="tip">Only zip type Allowed, and less than 5MB</div>
+        <div class="el-upload__tip" slot="tip">Only zip file Allowed, please zip two files together</div>
       </el-upload>
     </el-form-item>
      <!--  <el-form-item label="Activity form">
