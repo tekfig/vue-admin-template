@@ -168,7 +168,7 @@ export default {
         window.URL.revokeObjectURL(url)
       }).then(res => {
         const link = document.createElement('a')
-        link.href = 'http://161.35.227.64/JPlag/'
+        link.href = 'https://jplag.github.io/JPlag/'
         link.target = '_blank'
         link.click()
       })
